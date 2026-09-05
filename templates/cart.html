@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Velloria | My Cart</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
+```
+
+</head>
+
+<body>
+
+```
+<!-- ================= MAIN ================= -->
+
+<main class="main cart-page">
+
+    <!-- ================= CART HEADER ================= -->
+
+    <div class="cart-header">
+
+        <div>
+            <h1>My Cart 🛒</h1>
+            <p>Review your selected pieces before placing your order.</p>
+        </div>
+
+        <a href="/" class="continue-shopping">
+            ← Continue Shopping
+        </a>
+
+    </div>
+
+
+    <!-- ================= EMPTY CART ================= -->
+
+    <div id="empty-cart" class="empty-cart">
+
+        <div class="empty-cart-icon">
+            🛍️
+        </div>
+
+        <h2>Your cart is empty</h2>
+
+        <p>
+            Looks like you haven't added anything yet.
+        </p>
+
+        <button onclick="window.location.href='/'">
+            Start Shopping →
+        </button>
+
+    </div>
+
+
+    <!-- ================= CART CONTENT ================= -->
+
+    <div class="cart-layout">
+
+        <!-- PRODUCTS -->
+
+        <div class="cart-products">
+
+            <div class="cart-section-title">
+                <h2>Your Items</h2>
+                <span id="cart-item-label"></span>
+            </div>
+
+            <div id="cart-items">
+            </div>
+
+        </div>
+
+
+        <!-- PRICE DETAILS -->
+
+        <div id="cart-summary" class="cart-summary">
+
+            <h2>Price Details</h2>
+
+            <div class="price-row">
+
+                <span>Price</span>
+
+                <span id="cart-subtotal">
+                    ₹0
+                </span>
+
+            </div>
+
+
+            <div class="price-row">
+
+                <span>Delivery Charges</span>
+
+                <span class="free">
+                    FREE
+                </span>
+
+            </div>
+
+
+            <div class="price-divider"></div>
+
+
+            <div class="total-row">
+
+                <strong>Total Amount</strong>
+
+                <strong id="cart-total">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <button class="buy-button"
+                    onclick="checkout()">
+
+                Proceed to Buy
+                <span>→</span>
+
+            </button>
+
+
+            <p class="secure-text">
+                🔒 Safe & Secure Shopping
+            </p>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+```
+
+</body>
+
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Velloria | Own Your Style</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>Velloria</h1>
+            <p>Own Your Style</p>
+        </div>
+
+        <nav>
+
+            <a href="/" class="active">
+                ⌂ &nbsp; Home
+            </a>
+
+            <a href="#">
+                ☆ &nbsp; New Arrivals
+            </a>
+
+            <a href="#">
+                ♡ &nbsp; Best Sellers
+            </a>
+
+            <a href="#">
+                ▦ &nbsp; Collections
+            </a>
+
+            <hr>
+
+            <a href="#">
+                🛍 &nbsp; My Orders
+            </a>
+
+            <a href="#">
+                🚚 &nbsp; Order Tracking
+            </a>
+
+            <a href="#">
+                ☆ &nbsp; Reviews
+            </a>
+
+            <a href="#">
+                ♡ &nbsp; Wishlist
+            </a>
+
+            <hr>
+
+            <a href="#">
+                ♙ &nbsp; Profile
+            </a>
+
+            <a href="#">
+                ⌖ &nbsp; Addresses
+            </a>
+
+            <a href="#">
+                ⚙ &nbsp; Settings
+            </a>
+
+        </nav>
+
+        <div class="message-card">
+
+            <div class="message-icon">
+                ➤
+            </div>
+
+            <div>
+                <strong>Message Only</strong>
+                <p>No Ads. Just you.</p>
+            </div>
+
+            <span>❧</span>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+
+        <!-- ================= TOP BAR ================= -->
+
+        <header class="topbar">
+
+            <div class="search">
+
+                🔍
+
+                <input
+                    type="text"
+                    placeholder="Search for outfits, styles and more..."
+                >
+
+            </div>
+
+
+            <div class="actions">
+
+                <a href="#">
+                    ♡ Wishlist
+                </a>
+
+                <a href="#">
+                    ♙ Profile
+                </a>
+
+                <a href="/cart" class="cart-link">
+                    🛒 Cart
+                    <span id="cart-count">0</span>
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <!-- ================= CATEGORY BAR ================= -->
+
+        <div class="categories">
+
+            <a href="#">
+                👗 Women Clothing
+            </a>
+
+            <a href="#">
+                👕 Men Clothing
+            </a>
+
+            <a href="#">
+                👠 Women Footwear
+            </a>
+
+            <a href="#">
+                👟 Men Footwear
+            </a>
+
+            <a href="#">
+                👜 Accessories
+            </a>
+
+            <a href="#">
+                💎 Jewellery
+            </a>
+
+        </div>
+
+
+        <!-- ================= HERO ================= -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <p>NEW SEASON COLLECTION</p>
+
+                <h2>
+                    Effortless Style,
+                    <br>
+                    <em>Every Day</em>
+                </h2>
+
+                <p class="description">
+                    Timeless pieces for every
+                    <br>
+                    version of you.
+                </p>
+
+                <button>
+                    Explore Collection →
+                </button>
+
+            </div>
+
+
+            <div class="hero-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1000&q=80"
+                    alt="Fashion Collection"
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CATEGORY CARDS ================= -->
+
+        <section class="category-section">
+
+            <div class="category-card">
+
+                <div>
+                    <h3>
+                        Women<br>
+                        Clothing
+                    </h3>
+
+                    <a href="#">
+                        Shop Now →
+                    </a>
+                </div>
+
+            </div>
+
+
+            <div class="category-card">
+
+                <div>
+                    <h3>
+                        Men<br>
+                        Clothing
+                    </h3>
+
+                    <a href="#">
+                        Shop Now →
+                    </a>
+                </div>
+
+            </div>
+
+
+            <div class="category-card">
+
+                <div>
+                    <h3>
+                        Women<br>
+                        Footwear
+                    </h3>
+
+                    <a href="#">
+                        Shop Now →
+                    </a>
+                </div>
+
+            </div>
+
+
+            <div class="category-card">
+
+                <div>
+                    <h3>
+                        Men<br>
+                        Footwear
+                    </h3>
+
+                    <a href="#">
+                        Shop Now →
+                    </a>
+                </div>
+
+            </div>
+
+
+            <div class="category-card">
+
+                <div>
+                    <h3>
+                        Accessories
+                    </h3>
+
+                    <a href="#">
+                        Shop Now →
+                    </a>
+                </div>
+
+            </div>
+
+
+            <div class="category-card">
+
+                <div>
+                    <h3>
+                        Jewellery
+                    </h3>
+
+                    <a href="#">
+                        Shop Now →
+                    </a>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section class="dashboard">
+
+            <h2>
+                My Dashboard ❧
+            </h2>
+
+
+            <div class="dashboard-grid">
+
+
+                <div class="dashboard-card">
+
+                    <h3>
+                        🛍 My Orders
+                    </h3>
+
+                    <p>
+                        View your order history
+                    </p>
+
+                    <button>
+                        →
+                    </button>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <h3>
+                        🚚 Order Tracking
+                    </h3>
+
+                    <p>
+                        Track your current orders
+                    </p>
+
+                    <button>
+                        →
+                    </button>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <h3>
+                        ☆ Reviews
+                    </h3>
+
+                    <p>
+                        Write & view your reviews
+                    </p>
+
+                    <button>
+                        →
+                    </button>
+
+                </div>
+
+
+                <div class="dashboard-card">
+
+                    <h3>
+                        ♡ Wishlist
+                    </h3>
+
+                    <p>
+                        Your saved favourites
+                    </p>
+
+                    <button>
+                        →
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= NEW ARRIVALS ================= -->
+
+        <section class="products">
+
+
+            <div class="section-title">
+
+                <h2>
+                    New Arrivals ❧
+                </h2>
+
+                <a href="#">
+                    View All →
+                </a>
+
+            </div>
+
+
+            <div class="product-grid">
+
+
+                <!-- PRODUCT 1 -->
+
+                <div class="product-card">
+
+                    <div class="product-image">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80"
+                            alt="Floral Summer Dress"
+                        >
+
+                        <button>
+                            ♡
+                        </button>
+
+                    </div>
+
+                    <p>
+                        Women • Dress
+                    </p>
+
+                    <h3>
+                        Floral Summer Dress
+                    </h3>
+
+                    <strong>
+                        ₹1,499
+                    </strong>
+
+                    <button
+                        class="add-cart"
+                        onclick="addToCart('Floral Summer Dress', 1499)"
+                    >
+                        Add to Cart
+                    </button>
+
+                </div>
+
+
+                <!-- PRODUCT 2 -->
+
+                <div class="product-card">
+
+                    <div class="product-image">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=600&q=80"
+                            alt="Sky Blue Dress"
+                        >
+
+                        <button>
+                            ♡
+                        </button>
+
+                    </div>
+
+                    <p>
+                        Women • Dress
+                    </p>
+
+                    <h3>
+                        Sky Blue Dress
+                    </h3>
+
+                    <strong>
+                        ₹1,799
+                    </strong>
+
+                    <button
+                        class="add-cart"
+                        onclick="addToCart('Sky Blue Dress', 1799)"
+                    >
+                        Add to Cart
+                    </button>
+
+                </div>
+
+
+                <!-- PRODUCT 3 -->
+
+                <div class="product-card">
+
+                    <div class="product-image">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=600&q=80"
+                            alt="Classic Casual Shirt"
+                        >
+
+                        <button>
+                            ♡
+                        </button>
+
+                    </div>
+
+                    <p>
+                        Men • Shirt
+                    </p>
+
+                    <h3>
+                        Classic Casual Shirt
+                    </h3>
+
+                    <strong>
+                        ₹999
+                    </strong>
+
+                    <button
+                        class="add-cart"
+                        onclick="addToCart('Classic Casual Shirt', 999)"
+                    >
+                        Add to Cart
+                    </button>
+
+                </div>
+
+
+                <!-- PRODUCT 4 -->
+
+                <div class="product-card">
+
+                    <div class="product-image">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1605763240000-7e93b172d754?auto=format&fit=crop&w=600&q=80"
+                            alt="Soft Knit Top"
+                        >
+
+                        <button>
+                            ♡
+                        </button>
+
+                    </div>
+
+                    <p>
+                        Women • Top
+                    </p>
+
+                    <h3>
+                        Soft Knit Top
+                    </h3>
+
+                    <strong>
+                        ₹1,199
+                    </strong>
+
+                    <button
+                        class="add-cart"
+                        onclick="addToCart('Soft Knit Top', 1199)"
+                    >
+                        Add to Cart
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>
