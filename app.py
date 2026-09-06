@@ -5,15 +5,26 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# Secret key for login sessions
-app.secret_key = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET"
+# ============================================================
+# SECRET KEY
+# ============================================================
+
+app.secret_key = "velloria-project-secret-key-change-this-later"
 
 DB_NAME = "velloria.db"
 
 
-# =========================
+# ============================================================
+# ADMIN LOGIN
+# ============================================================
+
+ADMIN_USERNAME = "Mittali03"
+ADMIN_PASSWORD = "mittali@123"
+
+
+# ============================================================
 # DATABASE CONNECTION
-# =========================
+# ============================================================
 
 def get_db():
     conn = sqlite3.connect(DB_NAME)
@@ -21,11 +32,12 @@ def get_db():
     return conn
 
 
-# =========================
+# ============================================================
 # CREATE DATABASE TABLES
-# =========================
+# ============================================================
 
 def init_db():
+
     conn = get_db()
 
     conn.executescript("""
@@ -73,35 +85,50 @@ def init_db():
     conn.close()
 
 
-# =========================
-# LOGIN CHECK
-# =========================
+# ============================================================
+# INITIALIZE DATABASE
+# ============================================================
+
+init_db()
+
+
+# ============================================================
+# CUSTOMER LOGIN CHECK
+# ============================================================
 
 def logged_in():
     return "customer_id" in session
 
 
-# =========================
+# ============================================================
+# ADMIN LOGIN CHECK
+# ============================================================
+
+def admin_logged_in():
+    return session.get("admin_logged_in") is True
+
+
+# ============================================================
 # HOME PAGE
-# =========================
+# ============================================================
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-# =========================
+# ============================================================
 # CART PAGE
-# =========================
+# ============================================================
 
 @app.route("/cart")
 def cart():
     return render_template("cart.html")
 
 
-# =========================
-# LOGIN PAGE
-# =========================
+# ============================================================
+# CUSTOMER LOGIN PAGE
+# ============================================================
 
 @app.route("/login")
 def login():
@@ -112,9 +139,9 @@ def login():
     return render_template("login.html")
 
 
-# =========================
+# ============================================================
 # CHECKOUT PAGE
-# =========================
+# ============================================================
 
 @app.route("/checkout")
 def checkout():
@@ -125,9 +152,9 @@ def checkout():
     return render_template("checkout.html")
 
 
-# =========================
+# ============================================================
 # MY ORDERS
-# =========================
+# ============================================================
 
 @app.route("/orders")
 def orders():
@@ -149,12 +176,15 @@ def orders():
 
     conn.close()
 
-    return render_template("orders.html", orders=rows)
+    return render_template(
+        "orders.html",
+        orders=rows
+    )
 
 
-# =========================
+# ============================================================
 # ORDER TRACKING
-# =========================
+# ============================================================
 
 @app.route("/order-tracking")
 def order_tracking():
@@ -177,7 +207,10 @@ def order_tracking():
             FROM orders
             WHERE id=? AND customer_id=?
             """,
-            (order_id, session["customer_id"])
+            (
+                order_id,
+                session["customer_id"]
+            )
         ).fetchone()
 
         if order:
@@ -200,9 +233,9 @@ def order_tracking():
     )
 
 
-# =========================
+# ============================================================
 # PROFILE
-# =========================
+# ============================================================
 
 @app.route("/profile")
 def profile():
@@ -214,12 +247,13 @@ def profile():
 
     customer = conn.execute(
         """
-        SELECT id,
-               first_name,
-               last_name,
-               mobile,
-               email,
-               created_at
+        SELECT
+            id,
+            first_name,
+            last_name,
+            mobile,
+            email,
+            created_at
         FROM customers
         WHERE id=?
         """,
@@ -246,9 +280,9 @@ def profile():
     )
 
 
-# =========================
-# CHECK LOGIN SESSION
-# =========================
+# ============================================================
+# CUSTOMER SESSION API
+# ============================================================
 
 @app.route("/api/session")
 def api_session():
@@ -258,9 +292,9 @@ def api_session():
     })
 
 
-# =========================
-# SIGN UP
-# =========================
+# ============================================================
+# CUSTOMER SIGN UP
+# ============================================================
 
 @app.route("/api/signup", methods=["POST"])
 def api_signup():
@@ -278,7 +312,6 @@ def api_signup():
     state = data.get("state", "").strip()
     pincode = data.get("pincode", "").strip()
 
-    # Check required fields
     if not all([
         first,
         last,
@@ -289,13 +322,14 @@ def api_signup():
         state,
         pincode
     ]):
+
         return jsonify({
             "ok": False,
             "message": "Please fill all required fields."
         }), 400
 
-    # Password validation
     if len(password) < 6:
+
         return jsonify({
             "ok": False,
             "message": "Password must contain at least 6 characters."
@@ -305,7 +339,6 @@ def api_signup():
 
     try:
 
-        # Create customer
         cur = conn.execute(
             """
             INSERT INTO customers
@@ -331,7 +364,6 @@ def api_signup():
 
         customer_id = cur.lastrowid
 
-        # Save address
         conn.execute(
             """
             INSERT INTO addresses
@@ -357,7 +389,8 @@ def api_signup():
 
         conn.commit()
 
-        # Login automatically after signup
+        session.clear()
+
         session["customer_id"] = customer_id
         session["customer_name"] = first
 
@@ -380,9 +413,9 @@ def api_signup():
         conn.close()
 
 
-# =========================
-# LOGIN API
-# =========================
+# ============================================================
+# CUSTOMER LOGIN API
+# ============================================================
 
 @app.route("/api/login", methods=["POST"])
 def api_login():
@@ -405,20 +438,18 @@ def api_login():
 
     conn.close()
 
-    # Check login details
     if not customer or not check_password_hash(
         customer["password_hash"],
         password
     ):
+
         return jsonify({
             "ok": False,
             "message": "Invalid mobile number or password."
         }), 401
 
-    # Clear old session
     session.clear()
 
-    # Create new session
     session["customer_id"] = customer["id"]
     session["customer_name"] = customer["first_name"]
 
@@ -428,9 +459,9 @@ def api_login():
     })
 
 
-# =========================
-# LOGOUT
-# =========================
+# ============================================================
+# CUSTOMER LOGOUT
+# ============================================================
 
 @app.route("/logout")
 def logout():
@@ -440,14 +471,13 @@ def logout():
     return redirect(url_for("home"))
 
 
-# =========================
+# ============================================================
 # CREATE ORDER
-# =========================
+# ============================================================
 
 @app.route("/api/create-order", methods=["POST"])
 def create_order():
 
-    # User must be logged in
     if not logged_in():
 
         return jsonify({
@@ -459,7 +489,6 @@ def create_order():
 
     items = data.get("items", [])
 
-    # Check cart
     if not items:
 
         return jsonify({
@@ -470,7 +499,6 @@ def create_order():
     total = 0
     clean_items = []
 
-    # Validate cart items
     for item in items:
 
         name = str(
@@ -478,6 +506,7 @@ def create_order():
         ).strip()
 
         try:
+
             price = float(
                 item.get("price", 0)
             )
@@ -514,7 +543,6 @@ def create_order():
 
     try:
 
-        # Create order
         cur = conn.execute(
             """
             INSERT INTO orders
@@ -536,7 +564,36 @@ def create_order():
 
         order_id = cur.lastrowid
 
-        # Add order items
+        conn.executemany(
+            """
+            INSERT INTO order_items
+            (
+                order_id,
+                product_name,
+                price,
+                quantity
+            )
+            VALUES (?, ?, ?, ?)
+            """,
+            [
+                (
+                    name,
+                    price,
+                    qty
+                )
+                for name, price, qty in clean_items
+            ]
+        )
+
+        # Fix order_id for each order item
+        conn.execute(
+            """
+            DELETE FROM order_items
+            WHERE order_id=?
+            """,
+            (order_id,)
+        )
+
         conn.executemany(
             """
             INSERT INTO order_items
@@ -561,7 +618,7 @@ def create_order():
 
         conn.commit()
 
-    except Exception as e:
+    except Exception:
 
         conn.rollback()
 
@@ -581,13 +638,320 @@ def create_order():
     })
 
 
-# =========================
+# ============================================================
+# ============================================================
+# ADMIN SYSTEM
+# ============================================================
+# ============================================================
+
+
+# ============================================================
+# ADMIN LOGIN PAGE
+# ============================================================
+
+@app.route("/admin/login")
+def admin_login():
+
+    if admin_logged_in():
+        return redirect(url_for("admin_dashboard"))
+
+    return render_template("admin_login.html")
+
+
+# ============================================================
+# ADMIN LOGIN API
+# ============================================================
+
+@app.route("/admin/login", methods=["POST"])
+def admin_login_submit():
+
+    username = request.form.get(
+        "username",
+        ""
+    ).strip()
+
+    password = request.form.get(
+        "password",
+        ""
+    )
+
+    if (
+        username == ADMIN_USERNAME
+        and password == ADMIN_PASSWORD
+    ):
+
+        session.clear()
+
+        session["admin_logged_in"] = True
+        session["admin_username"] = ADMIN_USERNAME
+
+        return redirect(
+            url_for("admin_dashboard")
+        )
+
+    return render_template(
+        "admin_login.html",
+        error="Invalid admin username or password."
+    )
+
+
+# ============================================================
+# ADMIN DASHBOARD
+# ============================================================
+
+@app.route("/admin/dashboard")
+def admin_dashboard():
+
+    if not admin_logged_in():
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+    conn = get_db()
+
+    # Total customers
+    total_customers = conn.execute(
+        """
+        SELECT COUNT(*) AS count
+        FROM customers
+        """
+    ).fetchone()["count"]
+
+    # Total orders
+    total_orders = conn.execute(
+        """
+        SELECT COUNT(*) AS count
+        FROM orders
+        """
+    ).fetchone()["count"]
+
+    # Total sales
+    total_sales = conn.execute(
+        """
+        SELECT COALESCE(SUM(total_amount), 0) AS total
+        FROM orders
+        """
+    ).fetchone()["total"]
+
+    # Pending orders
+    pending_orders = conn.execute(
+        """
+        SELECT COUNT(*) AS count
+        FROM orders
+        WHERE status IN ('Placed', 'Processing', 'Shipped')
+        """
+    ).fetchone()["count"]
+
+    # All customers
+    customers = conn.execute(
+        """
+        SELECT
+            c.id,
+            c.first_name,
+            c.last_name,
+            c.mobile,
+            c.email,
+            c.created_at,
+            a.address_line,
+            a.city,
+            a.state,
+            a.pincode
+        FROM customers c
+        LEFT JOIN addresses a
+            ON a.id = (
+                SELECT MAX(a2.id)
+                FROM addresses a2
+                WHERE a2.customer_id = c.id
+            )
+        ORDER BY c.id DESC
+        """
+    ).fetchall()
+
+    # All orders
+    orders = conn.execute(
+        """
+        SELECT
+            o.id,
+            o.customer_id,
+            o.total_amount,
+            o.status,
+            o.created_at,
+            c.first_name,
+            c.last_name,
+            c.mobile
+        FROM orders o
+        JOIN customers c
+            ON o.customer_id = c.id
+        ORDER BY o.id DESC
+        """
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        "admin_dashboard.html",
+        total_customers=total_customers,
+        total_orders=total_orders,
+        total_sales=total_sales,
+        pending_orders=pending_orders,
+        customers=customers,
+        orders=orders
+    )
+
+
+# ============================================================
+# ADMIN ORDER DETAILS
+# ============================================================
+
+@app.route("/admin/order/<int:order_id>")
+def admin_order_details(order_id):
+
+    if not admin_logged_in():
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+    conn = get_db()
+
+    order = conn.execute(
+        """
+        SELECT
+            o.*,
+            c.first_name,
+            c.last_name,
+            c.mobile,
+            c.email
+        FROM orders o
+        JOIN customers c
+            ON o.customer_id = c.id
+        WHERE o.id=?
+        """,
+        (order_id,)
+    ).fetchone()
+
+    items = conn.execute(
+        """
+        SELECT *
+        FROM order_items
+        WHERE order_id=?
+        """,
+        (order_id,)
+    ).fetchall()
+
+    address = None
+
+    if order:
+
+        address = conn.execute(
+            """
+            SELECT *
+            FROM addresses
+            WHERE customer_id=?
+            ORDER BY id DESC
+            LIMIT 1
+            """,
+            (order["customer_id"],)
+        ).fetchone()
+
+    conn.close()
+
+    if not order:
+
+        return "Order not found", 404
+
+    return render_template(
+        "admin_order_details.html",
+        order=order,
+        items=items,
+        address=address
+    )
+
+
+# ============================================================
+# UPDATE ORDER STATUS
+# ============================================================
+
+@app.route(
+    "/admin/order/<int:order_id>/status",
+    methods=["POST"]
+)
+def update_order_status(order_id):
+
+    if not admin_logged_in():
+
+        return redirect(
+            url_for("admin_login")
+        )
+
+    status = request.form.get(
+        "status",
+        ""
+    ).strip()
+
+    allowed_statuses = [
+        "Placed",
+        "Processing",
+        "Shipped",
+        "Out for Delivery",
+        "Delivered",
+        "Cancelled"
+    ]
+
+    if status not in allowed_statuses:
+
+        return redirect(
+            url_for(
+                "admin_order_details",
+                order_id=order_id
+            )
+        )
+
+    conn = get_db()
+
+    conn.execute(
+        """
+        UPDATE orders
+        SET status=?
+        WHERE id=?
+        """,
+        (
+            status,
+            order_id
+        )
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect(
+        url_for(
+            "admin_order_details",
+            order_id=order_id
+        )
+    )
+
+
+# ============================================================
+# ADMIN LOGOUT
+# ============================================================
+
+@app.route("/admin/logout")
+def admin_logout():
+
+    session.clear()
+
+    return redirect(
+        url_for("admin_login")
+    )
+
+
+# ============================================================
 # START APPLICATION
-# =========================
+# ============================================================
 
 if __name__ == "__main__":
-
-    init_db()
 
     app.run(
         host="0.0.0.0",

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+<title>
+    Velloria - Order #{{ order["id"] }}
+</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4efe4;
+        color: #333;
+    }
+
+    .navbar {
+        background: #687044;
+        color: white;
+        padding: 18px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navbar h1 {
+        margin: 0;
+        letter-spacing: 4px;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+
+    .box {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow:
+            0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .box h2 {
+        margin-top: 0;
+    }
+
+    .info {
+        display: grid;
+        grid-template-columns:
+            repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .info div {
+        padding: 12px;
+        background: #f8f6ef;
+        border-radius: 8px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 13px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+    }
+
+    th {
+        background: #f4efe4;
+    }
+
+    select {
+        padding: 11px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-size: 15px;
+    }
+
+    button {
+        padding: 11px 18px;
+        border: none;
+        border-radius: 7px;
+        background: #687044;
+        color: white;
+        cursor: pointer;
+    }
+
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #687044;
+        text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+
+        .info {
+            grid-template-columns: 1fr;
+        }
+
+        .container {
+            padding: 0 12px;
+        }
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+
+<div class="navbar">
+
+    <h1>VELLORIA ADMIN</h1>
+
+    <a href="/admin/logout">
+        Logout
+    </a>
+
+</div>
+
+
+<div class="container">
+
+    <a
+        class="back"
+        href="/admin/dashboard">
+        ← Back to Dashboard
+    </a>
+
+
+    <div class="box">
+
+        <h2>
+            Order #{{ order["id"] }}
+        </h2>
+
+        <div class="info">
+
+            <div>
+                <strong>Customer:</strong><br>
+                {{ order["first_name"] }}
+                {{ order["last_name"] }}
+            </div>
+
+            <div>
+                <strong>Mobile:</strong><br>
+                {{ order["mobile"] }}
+            </div>
+
+            <div>
+                <strong>Email:</strong><br>
+                {{ order["email"] or "Not provided" }}
+            </div>
+
+            <div>
+                <strong>Total:</strong><br>
+                ₹{{ "%.2f"|format(order["total_amount"]) }}
+            </div>
+
+            <div>
+                <strong>Order Date:</strong><br>
+                {{ order["created_at"] }}
+            </div>
+
+            <div>
+                <strong>Current Status:</strong><br>
+                {{ order["status"] }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {% if address %}
+
+    <div class="box">
+
+        <h2>📍 Delivery Address</h2>
+
+        <p>
+            {{ address["address_line"] }}
+        </p>
+
+        <p>
+            {{ address["city"] }},
+            {{ address["state"] }}
+            - {{ address["pincode"] }}
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+    <div class="box">
+
+        <h2>📦 Ordered Products</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for item in items %}
+
+                <tr>
+
+                    <td>
+                        {{ item["product_name"] }}
+                    </td>
+
+                    <td>
+                        ₹{{ "%.2f"|format(item["price"]) }}
+                    </td>
+
+                    <td>
+                        {{ item["quantity"] }}
+                    </td>
+
+                    <td>
+                        ₹{{ "%.2f"|format(
+                            item["price"] * item["quantity"]
+                        ) }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <div class="box">
+
+        <h2>🔄 Update Order Status</h2>
+
+        <form
+            method="POST"
+            action="/admin/order/{{ order['id'] }}/status">
+
+            <select name="status" required>
+
+                <option
+                    value="Placed"
+                    {% if order["status"] == "Placed" %}
+                        selected
+                    {% endif %}>
+                    Placed
+                </option>
+
+                <option
+                    value="Processing"
+                    {% if order["status"] == "Processing" %}
+                        selected
+                    {% endif %}>
+                    Processing
+                </option>
+
+                <option
+                    value="Shipped"
+                    {% if order["status"] == "Shipped" %}
+                        selected
+                    {% endif %}>
+                    Shipped
+                </option>
+
+                <option
+                    value="Out for Delivery"
+                    {% if order["status"] == "Out for Delivery" %}
+                        selected
+                    {% endif %}>
+                    Out for Delivery
+                </option>
+
+                <option
+                    value="Delivered"
+                    {% if order["status"] == "Delivered" %}
+                        selected
+                    {% endif %}>
+                    Delivered
+                </option>
+
+                <option
+                    value="Cancelled"
+                    {% if order["status"] == "Cancelled" %}
+                        selected
+                    {% endif %}>
+                    Cancelled
+                </option>
+
+            </select>
+
+            <button type="submit">
+                Update Status
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>

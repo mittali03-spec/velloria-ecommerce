@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Velloria Admin Login</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Arial, sans-serif;
+        background: #f4efe4;
+        padding: 20px;
+    }
+
+    .admin-box {
+        width: 100%;
+        max-width: 420px;
+        background: white;
+        padding: 40px;
+        border-radius: 18px;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+    }
+
+    .logo {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .logo h1 {
+        margin: 0;
+        letter-spacing: 5px;
+        color: #687044;
+    }
+
+    .logo p {
+        color: #777;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 7px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 13px;
+        margin-bottom: 18px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        background: #687044;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        opacity: 0.9;
+    }
+
+    .error {
+        background: #ffe5e5;
+        color: #b00020;
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 18px;
+        text-align: center;
+    }
+
+    .back {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #687044;
+        text-decoration: none;
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+<div class="admin-box">
+
+```
+<div class="logo">
+    <h1>VELLORIA</h1>
+    <p>Admin Panel</p>
+</div>
+
+{% if error %}
+    <div class="error">
+        {{ error }}
+    </div>
+{% endif %}
+
+<form method="POST" action="/admin/login">
+
+    <label>Admin Username</label>
+
+    <input
+        type="text"
+        name="username"
+        required
+        placeholder="Enter admin username"
+    >
+
+    <label>Admin Password</label>
+
+    <input
+        type="password"
+        name="password"
+        required
+        placeholder="Enter admin password"
+    >
+
+    <button type="submit">
+        Login to Admin Panel
+    </button>
+
+</form>
+
+<a href="/" class="back">
+    ← Back to Velloria
+</a>
+```
+
+</div>
+
+</body>
+</html>
