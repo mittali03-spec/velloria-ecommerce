@@ -108,43 +108,42 @@
     {% if orders %}
 
         {% for order in orders %}
+<div class="order-card">
 
-        <div class="order-card">
+    <div class="order-header">
 
-            <div class="order-header">
+        <strong>
+            Order #{{ order["customer_order_no"] }}
+        </strong>
 
-                <strong>
-                    Order #{{ order["id"] }}
-                </strong>
+        <span class="status">
+            {{ order["status"] }}
+        </span>
 
-                <span class="status">
-                    {{ order["status"] }}
-                </span>
-
-            </div>
-
-
-            <p>
-                Date:
-                {{ order["created_at"] }}
-            </p>
+    </div>
 
 
-            <p>
-                Total:
-                ₹{{ "%.2f"|format(order["total_amount"]) }}
-            </p>
+    <p>
+        Date:
+        {{ order["created_at"] }}
+    </p>
 
 
-            <a
-                href="/order-tracking?order_id={{ order['id'] }}"
-                class="track-button">
+    <p>
+        Total:
+        ₹{{ "%.2f"|format(order["total_amount"]) }}
+    </p>
 
-                Track Order
 
-            </a>
+    <a
+        href="/order-tracking?order_id={{ order['id'] }}"
+        class="track-button">
 
-        </div>
+        Track Order
+
+    </a>
+
+</div>
 
         {% endfor %}
 
