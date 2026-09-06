@@ -792,50 +792,25 @@ async function placeOrder() {
         // ORDER SUCCESS
         // =================================
 
-        cart = [];
+     // =================================
+// ORDER SUCCESS
+// =================================
 
-        saveCart();
+cart = [];
 
-
-        alert(
-            "Order placed successfully! 🎉\n\n" +
-            "Order #" +
-            data.order_id
-        );
+saveCart();
 
 
-        window.location.href =
-            "/orders";
+alert(
+    "Order placed successfully! 🎉\n\n" +
+    "Order #" +
+    data.customer_order_no
+);
 
 
-    } catch (error) {
-
-        console.error(
-            "Order error:",
-            error
-        );
-
-
-        alert(
-            "Something went wrong while placing the order."
-        );
-
-
-    } finally {
-
-        if (button) {
-
-            button.disabled = false;
-
-            button.textContent =
-                "Place Order";
-
-        }
-
-    }
-}
-
-
+window.location.href =
+    "/orders";
+    
 // ========================================
 // PAGE LOAD
 // ========================================
