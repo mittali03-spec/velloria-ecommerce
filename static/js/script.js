@@ -86,8 +86,6 @@ function addToCart(name, price, image) {
         existingItem.quantity =
             Number(existingItem.quantity) + 1;
 
-        // If an image was supplied later,
-        // save it to the existing product.
         if (image && !existingItem.image) {
             existingItem.image = image;
         }
@@ -111,12 +109,11 @@ function addToCart(name, price, image) {
 
     saveCart();
 
-    // Refresh cart if we are currently on cart page
     displayCart();
 
     alert(
-    "🛒 Your product has been added to cart!"
-);
+        "🛒 Your product has been added to cart!"
+    );
 }
 
 
@@ -471,7 +468,6 @@ function updateCartSummary() {
     }
 
 
-    // Update number of products
     const itemLabel =
         document.getElementById(
             "cart-item-label"
@@ -792,25 +788,50 @@ async function placeOrder() {
         // ORDER SUCCESS
         // =================================
 
-     // =================================
-// ORDER SUCCESS
-// =================================
+        cart = [];
 
-cart = [];
-
-saveCart();
+        saveCart();
 
 
-alert(
-    "Order placed successfully! 🎉\n\n" +
-    "Order #" +
-    data.customer_order_no
-);
+        alert(
+            "Order placed successfully! 🎉\n\n" +
+            "Order #" +
+            data.customer_order_no
+        );
 
 
-window.location.href =
-    "/orders";
-    
+        window.location.href =
+            "/orders";
+
+
+    } catch (error) {
+
+        console.error(
+            "Order error:",
+            error
+        );
+
+
+        alert(
+            "Something went wrong while placing the order."
+        );
+
+
+    } finally {
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Place Order";
+
+        }
+
+    }
+}
+
+
 // ========================================
 // PAGE LOAD
 // ========================================
