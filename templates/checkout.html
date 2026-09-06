@@ -1,146 +1,318 @@
-```html
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
 
-    <title>Velloria - Checkout</title>
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
-    <style>
+<title>Velloria - Checkout</title>
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4efe4;
-        }
+<style>
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4efe4;
+    }
+
+    .checkout-container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: white;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+    }
+
+    h2 {
+        color: #333;
+        margin-top: 0;
+    }
+
+    .checkout-section {
+        border: 1px solid #ddd;
+        padding: 22px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+
+    .checkout-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+        gap: 15px;
+    }
+
+    .checkout-item:last-child {
+        border-bottom: none;
+    }
+
+    .item-name {
+        font-weight: 500;
+        color: #333;
+    }
+
+    .item-price {
+        font-weight: bold;
+        color: #687044;
+        white-space: nowrap;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        border-top: 2px solid #eee;
+        margin-top: 15px;
+        padding-top: 18px;
+    }
+
+    .total-label {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .total {
+        font-size: 22px;
+        font-weight: bold;
+        color: #687044;
+    }
+
+    .place-order {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 8px;
+        background: #687044;
+        color: white;
+        font-size: 17px;
+        cursor: pointer;
+        margin-top: 5px;
+        transition: 0.2s;
+    }
+
+    .place-order:hover {
+        background: #566033;
+    }
+
+    .place-order:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+    }
+
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #687044;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .back:hover {
+        text-decoration: underline;
+    }
+
+    .delivery-info {
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .empty-cart {
+        text-align: center;
+        padding: 25px;
+        color: #777;
+    }
+
+    .message {
+        display: none;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .error-message {
+        background: #ffe5e5;
+        color: #b00020;
+    }
+
+    .success-message {
+        background: #e7f5e9;
+        color: #287a35;
+    }
+
+    @media (max-width: 600px) {
 
         .checkout-container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: white;
-            padding: 35px;
-            border-radius: 18px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .checkout-section {
-            border: 1px solid #ddd;
-            padding: 22px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 14px;
         }
 
         .checkout-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
+            font-size: 14px;
         }
 
-        .total {
-            text-align: right;
-            font-size: 22px;
-            font-weight: bold;
-            margin-top: 20px;
+        h1 {
+            font-size: 28px;
         }
 
-        .place-order {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            background: #687044;
-            color: white;
-            font-size: 17px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
+    }
 
-        .back {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #687044;
-            text-decoration: none;
-        }
+</style>
 
-    </style>
 
 </head>
-
 
 <body>
 
 <div class="checkout-container">
 
-    <a
-        href="/cart"
-        class="back">
-        ← Back to Cart
-    </a>
+
+<a href="/cart" class="back">
+    ← Back to Cart
+</a>
+
+<h1>Checkout</h1>
+
+<div
+    id="error-message"
+    class="message error-message">
+</div>
+
+<div
+    id="success-message"
+    class="message success-message">
+</div>
 
 
-    <h1>Checkout</h1>
+<div class="checkout-section">
 
+    <h2>Your Order</h2>
 
-    <div class="checkout-section">
+    <div id="checkout-items"></div>
 
-        <h2>Your Order</h2>
+    <div class="total-row">
 
-        <div id="checkout-items"></div>
+        <span class="total-label">
+            Total
+        </span>
 
-        <div
+        <span
             class="total"
             id="checkout-total">
             ₹0.00
-        </div>
+        </span>
 
     </div>
 
+</div>
 
-    <div class="checkout-section">
 
-        <h2>Delivery Information</h2>
+<div class="checkout-section">
+
+    <h2>Delivery Information</h2>
+
+    <div class="delivery-info">
 
         <p>
             Your saved address will be used for delivery.
         </p>
 
         <p>
-            You can manage your address from your Profile.
+            You can manage your address from your
+            <a href="/profile">Profile</a>.
         </p>
 
     </div>
 
-
-    <button
-        id="place-order-button"
-        class="place-order"
-        onclick="placeOrder()">
-        Place Order
-    </button>
-
 </div>
 
 
+<button
+    id="place-order-button"
+    class="place-order"
+    onclick="placeOrder()">
+
+    Place Order
+
+</button>
+
+
+</div>
+
 <script>
 
-const checkoutCart =
-    JSON.parse(
-        localStorage.getItem("velloriaCart")
-    ) || [];
+let checkoutCart = [];
+
+let cartStorageKey = "velloriaCart";
+
+
+function getCart() {
+
+    const possibleKeys = [
+        "velloriaCart",
+        "cart",
+        "velloria_cart"
+    ];
+
+    for (const key of possibleKeys) {
+
+        const savedCart =
+            localStorage.getItem(key);
+
+        if (!savedCart) {
+            continue;
+        }
+
+        try {
+
+            const parsedCart =
+                JSON.parse(savedCart);
+
+            if (
+                Array.isArray(parsedCart) &&
+                parsedCart.length > 0
+            ) {
+
+                cartStorageKey = key;
+
+                return parsedCart;
+
+            }
+
+        } catch (error) {
+
+            console.log(
+                "Invalid cart data:",
+                key
+            );
+
+        }
+
+    }
+
+    return [];
+
+}
 
 
 function displayCheckout() {
+
+    checkoutCart = getCart();
 
     const container =
         document.getElementById(
@@ -152,31 +324,48 @@ function displayCheckout() {
             "checkout-total"
         );
 
+    const button =
+        document.getElementById(
+            "place-order-button"
+        );
+
 
     if (checkoutCart.length === 0) {
 
-        container.innerHTML =
-            "<p>Your cart is empty.</p>";
+        container.innerHTML = `
+            <div class="empty-cart">
+                <p>Your cart is empty.</p>
+                <a href="/cart">
+                    Continue Shopping
+                </a>
+            </div>
+        `;
 
         totalElement.textContent =
             "₹0.00";
 
+        button.disabled = true;
+
         return;
+
     }
 
 
     let total = 0;
-
 
     container.innerHTML = "";
 
 
     checkoutCart.forEach(function(item) {
 
-        const itemTotal =
-            Number(item.price) *
-            Number(item.quantity);
+        const quantity =
+            Number(item.quantity) || 1;
 
+        const price =
+            Number(item.price) || 0;
+
+        const itemTotal =
+            price * quantity;
 
         total += itemTotal;
 
@@ -190,13 +379,18 @@ function displayCheckout() {
 
         div.innerHTML = `
 
-            <span>
-                ${item.name}
-                × ${item.quantity}
+            <span class="item-name">
+
+                ${escapeHtml(item.name || "Product")}
+
+                × ${quantity}
+
             </span>
 
-            <strong>
+            <strong class="item-price">
+
                 ₹${itemTotal.toFixed(2)}
+
             </strong>
 
         `;
@@ -209,6 +403,214 @@ function displayCheckout() {
 
     totalElement.textContent =
         "₹" + total.toFixed(2);
+
+}
+
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+function showError(message) {
+
+    const error =
+        document.getElementById(
+            "error-message"
+        );
+
+    const success =
+        document.getElementById(
+            "success-message"
+        );
+
+
+    success.style.display = "none";
+
+    error.textContent = message;
+
+    error.style.display = "block";
+
+}
+
+
+function showSuccess(message) {
+
+    const error =
+        document.getElementById(
+            "error-message"
+        );
+
+    const success =
+        document.getElementById(
+            "success-message"
+        );
+
+
+    error.style.display = "none";
+
+    success.textContent = message;
+
+    success.style.display = "block";
+
+}
+
+
+async function placeOrder() {
+
+    const button =
+        document.getElementById(
+            "place-order-button"
+        );
+
+
+    if (
+        !checkoutCart ||
+        checkoutCart.length === 0
+    ) {
+
+        showError(
+            "Your cart is empty."
+        );
+
+        return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Placing Order...";
+
+
+    const orderItems =
+        checkoutCart.map(function(item) {
+
+            return {
+
+                name: item.name,
+
+                price: Number(item.price) || 0,
+
+                quantity:
+                    Number(item.quantity) || 1
+
+            };
+
+        });
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/create-order",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        items: orderItems
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (response.status === 401) {
+
+            window.location.href =
+                "/login?next=checkout";
+
+            return;
+
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Unable to place order."
+            );
+
+        }
+
+
+        showSuccess(
+            "Order placed successfully!"
+        );
+
+
+        /*
+         * Clear ONLY the cart storage
+         * used by this checkout page.
+         */
+
+        localStorage.removeItem(
+            cartStorageKey
+        );
+
+
+        /*
+         * Give the success message
+         * a moment before redirecting.
+         */
+
+        setTimeout(function() {
+
+            if (data.order_id) {
+
+                window.location.href =
+                    "/order-tracking?order_id=" +
+                    data.order_id;
+
+            } else {
+
+                window.location.href =
+                    "/orders";
+
+            }
+
+        }, 1000);
+
+
+    } catch (error) {
+
+        console.error(
+            "Order error:",
+            error
+        );
+
+
+        showError(
+            error.message ||
+            "Something went wrong while placing your order."
+        );
+
+
+        button.disabled = false;
+
+        button.textContent =
+            "Place Order";
+
+    }
+
 }
 
 

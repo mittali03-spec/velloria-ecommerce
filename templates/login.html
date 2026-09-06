@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velloria - Login</title>
 
+
+<title>Velloria - Login</title>
 
 <style>
     * {
@@ -128,11 +130,17 @@
         opacity: 0.9;
     }
 
+    .auth-button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
     .message {
         margin-top: 15px;
         text-align: center;
         font-weight: 600;
         min-height: 22px;
+        color: #687044;
     }
 
     .back-home {
@@ -207,35 +215,46 @@
         onsubmit="loginUser(event)">
 
         <div class="form-group">
-            <label for="login-mobile">Mobile Number</label>
+
+            <label for="login-mobile">
+                Mobile Number
+            </label>
 
             <input
                 type="tel"
                 id="login-mobile"
                 required
-                placeholder="Enter mobile number">
+                maxlength="10"
+                inputmode="numeric"
+                placeholder="Enter 10-digit mobile number">
+
         </div>
 
         <div class="form-group">
-            <label for="login-password">Password</label>
+
+            <label for="login-password">
+                Password
+            </label>
 
             <input
                 type="password"
                 id="login-password"
                 required
                 placeholder="Enter password">
+
         </div>
 
         <button
             type="submit"
-            class="auth-button">
+            class="auth-button"
+            id="login-button">
             Login
         </button>
 
     </form>
 
 
-    <!-- SIGN UP FORM -->
+    <!-- SIGNUP FORM -->
 
     <form
         id="signup-form"
@@ -245,38 +264,55 @@
         <div class="row">
 
             <div class="form-group">
-                <label for="first-name">First Name</label>
+
+                <label for="first-name">
+                    First Name
+                </label>
 
                 <input
                     type="text"
                     id="first-name"
-                    required>
+                    required
+                    placeholder="First name">
+
             </div>
 
             <div class="form-group">
-                <label for="last-name">Last Name</label>
+
+                <label for="last-name">
+                    Last Name
+                </label>
 
                 <input
                     type="text"
                     id="last-name"
-                    required>
+                    required
+                    placeholder="Last name">
+
             </div>
 
         </div>
 
 
         <div class="form-group">
-            <label for="signup-mobile">Mobile Number</label>
+
+            <label for="signup-mobile">
+                Mobile Number
+            </label>
 
             <input
                 type="tel"
                 id="signup-mobile"
                 required
-                placeholder="Enter mobile number">
+                maxlength="10"
+                inputmode="numeric"
+                placeholder="Enter 10-digit mobile number">
+
         </div>
 
 
         <div class="form-group">
+
             <label for="signup-email">
                 Email / Gmail (Optional)
             </label>
@@ -285,11 +321,15 @@
                 type="email"
                 id="signup-email"
                 placeholder="Enter email">
+
         </div>
 
 
         <div class="form-group">
-            <label for="signup-password">Password</label>
+
+            <label for="signup-password">
+                Password
+            </label>
 
             <input
                 type="password"
@@ -297,59 +337,79 @@
                 minlength="6"
                 required
                 placeholder="Minimum 6 characters">
+
         </div>
 
 
         <div class="form-group">
-            <label for="signup-address">Address</label>
+
+            <label for="signup-address">
+                Address
+            </label>
 
             <input
                 type="text"
                 id="signup-address"
                 required
-                placeholder="Enter your address">
+                placeholder="Enter your full address">
+
         </div>
 
 
         <div class="row">
 
             <div class="form-group">
-                <label for="signup-city">City</label>
+
+                <label for="signup-city">
+                    City
+                </label>
 
                 <input
                     type="text"
                     id="signup-city"
                     required
                     placeholder="City">
+
             </div>
 
             <div class="form-group">
-                <label for="signup-state">State</label>
+
+                <label for="signup-state">
+                    State
+                </label>
 
                 <input
                     type="text"
                     id="signup-state"
                     required
                     placeholder="State">
+
             </div>
 
         </div>
 
 
         <div class="form-group">
-            <label for="signup-pincode">Pincode</label>
+
+            <label for="signup-pincode">
+                Pincode
+            </label>
 
             <input
                 type="text"
                 id="signup-pincode"
                 required
-                placeholder="Enter pincode">
+                maxlength="6"
+                inputmode="numeric"
+                placeholder="Enter 6-digit pincode">
+
         </div>
 
 
         <button
             type="submit"
-            class="auth-button">
+            class="auth-button"
+            id="signup-button">
             Create Account
         </button>
 
@@ -428,42 +488,68 @@
         const message =
             document.getElementById("message");
 
+        const button =
+            document.getElementById("login-button");
+
         const mobile =
-            document.getElementById("login-mobile").value.trim();
+            document
+                .getElementById("login-mobile")
+                .value
+                .trim();
 
         const password =
-            document.getElementById("login-password").value;
+            document
+                .getElementById("login-password")
+                .value;
 
 
-        message.textContent = "Logging in...";
+        if (!/^\d{10}$/.test(mobile)) {
+
+            message.textContent =
+                "Please enter a valid 10-digit mobile number.";
+
+            return;
+        }
+
+
+        message.textContent =
+            "Logging in...";
+
+        button.disabled = true;
 
 
         try {
 
-            const response = await fetch(
-                "/api/login",
-                {
-                    method: "POST",
+            const response =
+                await fetch(
+                    "/api/login",
+                    {
+                        method: "POST",
 
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
 
-                    body: JSON.stringify({
-                        mobile: mobile,
-                        password: password
-                    })
-                }
-            );
+                        body: JSON.stringify({
+                            mobile: mobile,
+                            password: password
+                        })
+                    }
+                );
 
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
 
             if (!response.ok || !data.ok) {
 
                 message.textContent =
-                    data.message || "Invalid mobile number or password.";
+                    data.message ||
+                    "Unable to login.";
+
+                button.disabled = false;
 
                 return;
             }
@@ -501,11 +587,15 @@
 
         } catch (error) {
 
-            console.error("Login error:", error);
+            console.error(
+                "Login error:",
+                error
+            );
 
             message.textContent =
                 "Unable to connect to the server.";
 
+            button.disabled = false;
         }
     }
 
@@ -517,56 +607,137 @@
         const message =
             document.getElementById("message");
 
+        const button =
+            document.getElementById("signup-button");
+
+
+        const first =
+            document
+                .getElementById("first-name")
+                .value
+                .trim();
+
+        const last =
+            document
+                .getElementById("last-name")
+                .value
+                .trim();
+
+        const mobile =
+            document
+                .getElementById("signup-mobile")
+                .value
+                .trim();
+
+        const email =
+            document
+                .getElementById("signup-email")
+                .value
+                .trim();
+
+        const password =
+            document
+                .getElementById("signup-password")
+                .value;
+
+        const address =
+            document
+                .getElementById("signup-address")
+                .value
+                .trim();
+
+        const city =
+            document
+                .getElementById("signup-city")
+                .value
+                .trim();
+
+        const state =
+            document
+                .getElementById("signup-state")
+                .value
+                .trim();
+
+        const pincode =
+            document
+                .getElementById("signup-pincode")
+                .value
+                .trim();
+
+
+        if (!/^\d{10}$/.test(mobile)) {
+
+            message.textContent =
+                "Please enter a valid 10-digit mobile number.";
+
+            return;
+        }
+
+
+        if (password.length < 6) {
+
+            message.textContent =
+                "Password must contain at least 6 characters.";
+
+            return;
+        }
+
+
+        if (!/^\d{6}$/.test(pincode)) {
+
+            message.textContent =
+                "Please enter a valid 6-digit pincode.";
+
+            return;
+        }
+
 
         const signupData = {
 
-            first_name:
-                document.getElementById("first-name").value.trim(),
+            first_name: first,
 
-            last_name:
-                document.getElementById("last-name").value.trim(),
+            last_name: last,
 
-            mobile:
-                document.getElementById("signup-mobile").value.trim(),
+            mobile: mobile,
 
-            email:
-                document.getElementById("signup-email").value.trim(),
+            email: email,
 
-            password:
-                document.getElementById("signup-password").value,
+            password: password,
 
-            address:
-                document.getElementById("signup-address").value.trim(),
+            address: address,
 
-            city:
-                document.getElementById("signup-city").value.trim(),
+            city: city,
 
-            state:
-                document.getElementById("signup-state").value.trim(),
+            state: state,
 
-            pincode:
-                document.getElementById("signup-pincode").value.trim()
+            pincode: pincode
         };
 
 
         message.textContent =
             "Creating your account...";
 
+        button.disabled = true;
+
 
         try {
 
-            const response = await fetch(
-                "/api/signup",
-                {
-                    method: "POST",
+            const response =
+                await fetch(
+                    "/api/signup",
+                    {
+                        method: "POST",
 
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
 
-                    body: JSON.stringify(signupData)
-                }
-            );
+                        body: JSON.stringify(
+                            signupData
+                        )
+                    }
+                );
 
 
             const result =
@@ -576,7 +747,10 @@
             if (!response.ok || !result.ok) {
 
                 message.textContent =
-                    result.message || "Unable to create account.";
+                    result.message ||
+                    "Unable to create account.";
+
+                button.disabled = false;
 
                 return;
             }
@@ -586,16 +760,16 @@
                 "Account created successfully!";
 
 
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+            const next =
+                params.get("next");
+
+
             setTimeout(function () {
-
-                const params =
-                    new URLSearchParams(
-                        window.location.search
-                    );
-
-                const next =
-                    params.get("next");
-
 
                 if (next === "checkout") {
 
@@ -614,15 +788,20 @@
 
         } catch (error) {
 
-            console.error("Signup error:", error);
+            console.error(
+                "Signup error:",
+                error
+            );
 
             message.textContent =
                 "Unable to connect to the server.";
 
+            button.disabled = false;
         }
     }
 
 </script>
+
 
 </body>
 </html>
