@@ -1,451 +1,452 @@
 <!DOCTYPE html>
+
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Velloria - Login</title>
 
-    <style>
 
-        * {
-            box-sizing: border-box;
-        }
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4efe4;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+    }
+
+    .auth-container {
+        width: 100%;
+        max-width: 480px;
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .brand {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .brand h1 {
+        margin: 0;
+        font-size: 34px;
+        letter-spacing: 4px;
+        color: #333333;
+    }
+
+    .brand p {
+        margin-top: 8px;
+        color: #777777;
+    }
+
+    .tabs {
+        display: flex;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .tab {
+        width: 50%;
+        border: none;
+        background: transparent;
+        padding: 14px;
+        cursor: pointer;
+        font-size: 16px;
+        color: #555555;
+    }
+
+    .tab.active {
+        border-bottom: 3px solid #687044;
+        font-weight: bold;
+        color: #333333;
+    }
+
+    .form {
+        display: none;
+    }
+
+    .form.active {
+        display: block;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #333333;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #cccccc;
+        border-radius: 8px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: #687044;
+    }
+
+    .row {
+        display: flex;
+        gap: 12px;
+    }
+
+    .row .form-group {
+        width: 50%;
+    }
+
+    .auth-button {
+        width: 100%;
+        border: none;
+        padding: 14px;
+        border-radius: 8px;
+        background: #687044;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 8px;
+    }
+
+    .auth-button:hover {
+        opacity: 0.9;
+    }
+
+    .message {
+        margin-top: 15px;
+        text-align: center;
+        font-weight: 600;
+        min-height: 22px;
+    }
+
+    .back-home {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        color: #687044;
+        text-decoration: none;
+    }
+
+    .back-home:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4efe4;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
+            padding: 15px;
         }
 
         .auth-container {
-            width: 100%;
-            max-width: 480px;
-            background: white;
-            padding: 35px;
-            border-radius: 18px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
-        }
-
-        .brand {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .brand h1 {
-            margin: 0;
-            font-size: 34px;
-            letter-spacing: 4px;
-        }
-
-        .brand p {
-            margin-top: 8px;
-            color: #777;
-        }
-
-        .tabs {
-            display: flex;
-            margin-bottom: 25px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .tab {
-            width: 50%;
-            border: none;
-            background: none;
-            padding: 14px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .tab.active {
-            border-bottom: 3px solid #687044;
-            font-weight: bold;
-        }
-
-        .form {
-            display: none;
-        }
-
-        .form.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 15px;
+            padding: 25px 20px;
         }
 
         .row {
-            display: flex;
-            gap: 12px;
+            display: block;
         }
 
         .row .form-group {
-            width: 50%;
-        }
-
-        .auth-button {
             width: 100%;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            background: #687044;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 8px;
         }
+    }
+</style>
 
-        .auth-button:hover {
-            opacity: 0.9;
-        }
-
-        .message {
-            margin-top: 15px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .back-home {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #687044;
-            text-decoration: none;
-        }
-
-        @media (max-width: 500px) {
-
-            .auth-container {
-                padding: 25px;
-            }
-
-            .row {
-                display: block;
-            }
-
-            .row .form-group {
-                width: 100%;
-            }
-        }
-
-    </style>
 
 </head>
 
-
 <body>
 
-    <div class="auth-container">
 
-        <div class="brand">
-
-            <h1>VELLORIA</h1>
-
-            <p>
-                Welcome to your fashion space
-            </p>
-
-        </div>
-
-
-        <div class="tabs">
-
-            <button
-                class="tab active"
-                onclick="showLogin()">
-                Login
-            </button>
-
-            <button
-                class="tab"
-                onclick="showSignup()">
-                Sign Up
-            </button>
-
-        </div>
-
-
-        <!-- LOGIN FORM -->
-
-        <form
-            id="login-form"
-            class="form active"
-            onsubmit="loginUser(event)">
-
-            <div class="form-group">
-
-                <label>Mobile Number</label>
-
-                <input
-                    type="tel"
-                    id="login-mobile"
-                    required
-                    placeholder="Enter mobile number">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Password</label>
-
-                <input
-                    type="password"
-                    id="login-password"
-                    required
-                    placeholder="Enter password">
-
-            </div>
-
-
-            <button
-                type="submit"
-                class="auth-button">
-                Login
-            </button>
-
-        </form>
-
-
-        <!-- SIGNUP FORM -->
-
-        <form
-            id="signup-form"
-            class="form"
-            onsubmit="signupUser(event)">
-
-            <div class="row">
-
-                <div class="form-group">
-
-                    <label>First Name</label>
-
-                    <input
-                        type="text"
-                        id="first-name"
-                        required>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>Last Name</label>
-
-                    <input
-                        type="text"
-                        id="last-name"
-                        required>
-
-                </div>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Mobile Number</label>
-
-                <input
-                    type="tel"
-                    id="signup-mobile"
-                    required>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Email / Gmail (Optional)</label>
-
-                <input
-                    type="email"
-                    id="signup-email">
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Password</label>
-
-                <input
-                    type="password"
-                    id="signup-password"
-                    minlength="6"
-                    required>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Address</label>
-
-                <input
-                    type="text"
-                    id="signup-address"
-                    required>
-
-            </div>
-
-
-            <div class="row">
-
-                <div class="form-group">
-
-                    <label>City</label>
-
-                    <input
-                        type="text"
-                        id="signup-city"
-                        required>
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>State</label>
-
-                    <input
-                        type="text"
-                        id="signup-state"
-                        required>
-
-                </div>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>Pincode</label>
-
-                <input
-                    type="text"
-                    id="signup-pincode"
-                    required>
-
-            </div>
-
-
-            <button
-                type="submit"
-                class="auth-button">
-                Create Account
-            </button>
-
-        </form>
-
-
-        <div
-            id="message"
-            class="message">
-        </div>
-
-
-        <a
-            href="/"
-            class="back-home">
-            ← Back to Velloria
-        </a>
+<div class="auth-container">
+
+    <div class="brand">
+        <h1>VELLORIA</h1>
+        <p>Welcome to your fashion space</p>
+    </div>
+
+    <div class="tabs">
+
+        <button
+            type="button"
+            class="tab active"
+            id="login-tab"
+            onclick="showLogin()">
+            Login
+        </button>
+
+        <button
+            type="button"
+            class="tab"
+            id="signup-tab"
+            onclick="showSignup()">
+            Sign Up
+        </button>
 
     </div>
+
+    <!-- LOGIN FORM -->
+
+    <form
+        id="login-form"
+        class="form active"
+        onsubmit="loginUser(event)">
+
+        <div class="form-group">
+            <label for="login-mobile">Mobile Number</label>
+
+            <input
+                type="tel"
+                id="login-mobile"
+                required
+                placeholder="Enter mobile number">
+        </div>
+
+        <div class="form-group">
+            <label for="login-password">Password</label>
+
+            <input
+                type="password"
+                id="login-password"
+                required
+                placeholder="Enter password">
+        </div>
+
+        <button
+            type="submit"
+            class="auth-button">
+            Login
+        </button>
+
+    </form>
+
+
+    <!-- SIGN UP FORM -->
+
+    <form
+        id="signup-form"
+        class="form"
+        onsubmit="signupUser(event)">
+
+        <div class="row">
+
+            <div class="form-group">
+                <label for="first-name">First Name</label>
+
+                <input
+                    type="text"
+                    id="first-name"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="last-name">Last Name</label>
+
+                <input
+                    type="text"
+                    id="last-name"
+                    required>
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+            <label for="signup-mobile">Mobile Number</label>
+
+            <input
+                type="tel"
+                id="signup-mobile"
+                required
+                placeholder="Enter mobile number">
+        </div>
+
+
+        <div class="form-group">
+            <label for="signup-email">
+                Email / Gmail (Optional)
+            </label>
+
+            <input
+                type="email"
+                id="signup-email"
+                placeholder="Enter email">
+        </div>
+
+
+        <div class="form-group">
+            <label for="signup-password">Password</label>
+
+            <input
+                type="password"
+                id="signup-password"
+                minlength="6"
+                required
+                placeholder="Minimum 6 characters">
+        </div>
+
+
+        <div class="form-group">
+            <label for="signup-address">Address</label>
+
+            <input
+                type="text"
+                id="signup-address"
+                required
+                placeholder="Enter your address">
+        </div>
+
+
+        <div class="row">
+
+            <div class="form-group">
+                <label for="signup-city">City</label>
+
+                <input
+                    type="text"
+                    id="signup-city"
+                    required
+                    placeholder="City">
+            </div>
+
+            <div class="form-group">
+                <label for="signup-state">State</label>
+
+                <input
+                    type="text"
+                    id="signup-state"
+                    required
+                    placeholder="State">
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+            <label for="signup-pincode">Pincode</label>
+
+            <input
+                type="text"
+                id="signup-pincode"
+                required
+                placeholder="Enter pincode">
+        </div>
+
+
+        <button
+            type="submit"
+            class="auth-button">
+            Create Account
+        </button>
+
+    </form>
+
+
+    <div
+        id="message"
+        class="message">
+    </div>
+
+
+    <a
+        href="/"
+        class="back-home">
+        ← Back to Velloria
+    </a>
+
+</div>
 
 
 <script>
 
-function showLogin() {
+    function showLogin() {
 
-    document
-        .getElementById("login-form")
-        .classList.add("active");
+        document
+            .getElementById("login-form")
+            .classList.add("active");
 
-    document
-        .getElementById("signup-form")
-        .classList.remove("active");
+        document
+            .getElementById("signup-form")
+            .classList.remove("active");
 
-    document
-        .querySelectorAll(".tab")[0]
-        .classList.add("active");
+        document
+            .getElementById("login-tab")
+            .classList.add("active");
 
-    document
-        .querySelectorAll(".tab")[1]
-        .classList.remove("active");
-}
+        document
+            .getElementById("signup-tab")
+            .classList.remove("active");
 
-
-function showSignup() {
-
-    document
-        .getElementById("signup-form")
-        .classList.add("active");
-
-    document
-        .getElementById("login-form")
-        .classList.remove("active");
-
-    document
-        .querySelectorAll(".tab")[1]
-        .classList.add("active");
-
-    document
-        .querySelectorAll(".tab")[0]
-        .classList.remove("active");
-}
+        document
+            .getElementById("message")
+            .textContent = "";
+    }
 
 
-async function loginUser(event) {
+    function showSignup() {
 
-    event.preventDefault();
+        document
+            .getElementById("signup-form")
+            .classList.add("active");
 
-    const message =
-        document.getElementById("message");
+        document
+            .getElementById("login-form")
+            .classList.remove("active");
 
-    const mobile =
-        document.getElementById("login-mobile").value;
+        document
+            .getElementById("signup-tab")
+            .classList.add("active");
 
-    const password =
-        document.getElementById("login-password").value;
+        document
+            .getElementById("login-tab")
+            .classList.remove("active");
+
+        document
+            .getElementById("message")
+            .textContent = "";
+    }
 
 
-    try {
+    async function loginUser(event) {
 
-        const response =
-            await fetch(
+        event.preventDefault();
+
+        const message =
+            document.getElementById("message");
+
+        const mobile =
+            document.getElementById("login-mobile").value.trim();
+
+        const password =
+            document.getElementById("login-password").value;
+
+
+        message.textContent = "Logging in...";
+
+
+        try {
+
+            const response = await fetch(
                 "/api/login",
                 {
                     method: "POST",
 
                     headers: {
-                        "Content-Type":
-                            "application/json"
+                        "Content-Type": "application/json"
                     },
 
                     body: JSON.stringify({
@@ -456,174 +457,172 @@ async function loginUser(event) {
             );
 
 
-        const data =
-            await response.json();
+            const data = await response.json();
 
 
-        if (!data.ok) {
+            if (!response.ok || !data.ok) {
 
-            message.textContent =
-                data.message;
+                message.textContent =
+                    data.message || "Invalid mobile number or password.";
 
-            return;
-        }
-
-
-        message.textContent =
-            "Login successful!";
-
-
-        const params =
-            new URLSearchParams(
-                window.location.search
-            );
-
-        const next =
-            params.get("next");
-
-
-        setTimeout(function() {
-
-            if (next === "checkout") {
-
-                window.location.href =
-                    "/checkout";
-
-            } else {
-
-                window.location.href =
-                    "/";
-
+                return;
             }
 
-        }, 500);
+
+            message.textContent =
+                "Login successful!";
 
 
-    } catch (error) {
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
 
-        console.error(error);
+            const next =
+                params.get("next");
+
+
+            setTimeout(function () {
+
+                if (next === "checkout") {
+
+                    window.location.href =
+                        "/checkout";
+
+                } else {
+
+                    window.location.href =
+                        "/";
+
+                }
+
+            }, 500);
+
+
+        } catch (error) {
+
+            console.error("Login error:", error);
+
+            message.textContent =
+                "Unable to connect to the server.";
+
+        }
+    }
+
+
+    async function signupUser(event) {
+
+        event.preventDefault();
+
+        const message =
+            document.getElementById("message");
+
+
+        const signupData = {
+
+            first_name:
+                document.getElementById("first-name").value.trim(),
+
+            last_name:
+                document.getElementById("last-name").value.trim(),
+
+            mobile:
+                document.getElementById("signup-mobile").value.trim(),
+
+            email:
+                document.getElementById("signup-email").value.trim(),
+
+            password:
+                document.getElementById("signup-password").value,
+
+            address:
+                document.getElementById("signup-address").value.trim(),
+
+            city:
+                document.getElementById("signup-city").value.trim(),
+
+            state:
+                document.getElementById("signup-state").value.trim(),
+
+            pincode:
+                document.getElementById("signup-pincode").value.trim()
+        };
+
 
         message.textContent =
-            "Something went wrong.";
-
-    }
-}
+            "Creating your account...";
 
 
-async function signupUser(event) {
+        try {
 
-    event.preventDefault();
-
-    const message =
-        document.getElementById("message");
-
-
-    const data = {
-
-        first_name:
-            document.getElementById(
-                "first-name"
-            ).value,
-
-        last_name:
-            document.getElementById(
-                "last-name"
-            ).value,
-
-        mobile:
-            document.getElementById(
-                "signup-mobile"
-            ).value,
-
-        email:
-            document.getElementById(
-                "signup-email"
-            ).value,
-
-        password:
-            document.getElementById(
-                "signup-password"
-            ).value,
-
-        address:
-            document.getElementById(
-                "signup-address"
-            ).value,
-
-        city:
-            document.getElementById(
-                "signup-city"
-            ).value,
-
-        state:
-            document.getElementById(
-                "signup-state"
-            ).value,
-
-        pincode:
-            document.getElementById(
-                "signup-pincode"
-            ).value
-
-    };
-
-
-    try {
-
-        const response =
-            await fetch(
+            const response = await fetch(
                 "/api/signup",
                 {
                     method: "POST",
 
                     headers: {
-                        "Content-Type":
-                            "application/json"
+                        "Content-Type": "application/json"
                     },
 
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(signupData)
                 }
             );
 
 
-        const result =
-            await response.json();
+            const result =
+                await response.json();
 
 
-        if (!result.ok) {
+            if (!response.ok || !result.ok) {
+
+                message.textContent =
+                    result.message || "Unable to create account.";
+
+                return;
+            }
+
 
             message.textContent =
-                result.message;
+                "Account created successfully!";
 
-            return;
+
+            setTimeout(function () {
+
+                const params =
+                    new URLSearchParams(
+                        window.location.search
+                    );
+
+                const next =
+                    params.get("next");
+
+
+                if (next === "checkout") {
+
+                    window.location.href =
+                        "/checkout";
+
+                } else {
+
+                    window.location.href =
+                        "/";
+
+                }
+
+            }, 700);
+
+
+        } catch (error) {
+
+            console.error("Signup error:", error);
+
+            message.textContent =
+                "Unable to connect to the server.";
+
         }
-
-
-        message.textContent =
-            "Account created successfully!";
-
-
-        setTimeout(function() {
-
-            window.location.href =
-                "/checkout";
-
-        }, 500);
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        message.textContent =
-            "Something went wrong.";
-
     }
-}
 
 </script>
 
 </body>
-
 </html>
-
