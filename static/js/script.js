@@ -793,11 +793,13 @@ async function placeOrder() {
         saveCart();
 
 
+       console.log("ORDER RESPONSE:", data);
+
         alert(
-            "Order placed successfully! 🎉\n\n" +
-            "Order #" +
-            data.customer_order_no
-        );
+          "Order placed successfully! 🎉\n\n" +
+          "Order #" +
+          data.customer_order_no
+       );
 
 
         window.location.href =
