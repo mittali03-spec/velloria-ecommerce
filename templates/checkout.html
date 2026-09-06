@@ -1,0 +1,223 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Velloria - Checkout</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4efe4;
+        }
+
+        .checkout-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .checkout-section {
+            border: 1px solid #ddd;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .checkout-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .place-order {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #687044;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #687044;
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="checkout-container">
+
+    <a
+        href="/cart"
+        class="back">
+        ← Back to Cart
+    </a>
+
+
+    <h1>Checkout</h1>
+
+
+    <div class="checkout-section">
+
+        <h2>Your Order</h2>
+
+        <div id="checkout-items"></div>
+
+        <div
+            class="total"
+            id="checkout-total">
+            ₹0.00
+        </div>
+
+    </div>
+
+
+    <div class="checkout-section">
+
+        <h2>Delivery Information</h2>
+
+        <p>
+            Your saved address will be used for delivery.
+        </p>
+
+        <p>
+            You can manage your address from your Profile.
+        </p>
+
+    </div>
+
+
+    <button
+        id="place-order-button"
+        class="place-order"
+        onclick="placeOrder()">
+        Place Order
+    </button>
+
+</div>
+
+
+<script>
+
+const checkoutCart =
+    JSON.parse(
+        localStorage.getItem("velloriaCart")
+    ) || [];
+
+
+function displayCheckout() {
+
+    const container =
+        document.getElementById(
+            "checkout-items"
+        );
+
+    const totalElement =
+        document.getElementById(
+            "checkout-total"
+        );
+
+
+    if (checkoutCart.length === 0) {
+
+        container.innerHTML =
+            "<p>Your cart is empty.</p>";
+
+        totalElement.textContent =
+            "₹0.00";
+
+        return;
+    }
+
+
+    let total = 0;
+
+
+    container.innerHTML = "";
+
+
+    checkoutCart.forEach(function(item) {
+
+        const itemTotal =
+            Number(item.price) *
+            Number(item.quantity);
+
+
+        total += itemTotal;
+
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "checkout-item";
+
+
+        div.innerHTML = `
+
+            <span>
+                ${item.name}
+                × ${item.quantity}
+            </span>
+
+            <strong>
+                ₹${itemTotal.toFixed(2)}
+            </strong>
+
+        `;
+
+
+        container.appendChild(div);
+
+    });
+
+
+    totalElement.textContent =
+        "₹" + total.toFixed(2);
+}
+
+
+displayCheckout();
+
+</script>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>

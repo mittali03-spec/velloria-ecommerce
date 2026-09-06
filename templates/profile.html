@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Velloria - Profile</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4efe4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        a {
+            color: #687044;
+            text-decoration: none;
+        }
+
+        .logout {
+            display: inline-block;
+            background: #687044;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 7px;
+            margin-top: 15px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <a href="/">
+        ← Back to Home
+    </a>
+
+
+    <div class="card">
+
+        <h1>My Profile</h1>
+
+
+        <div class="info">
+
+            <span class="label">
+                Name:
+            </span>
+
+            {{ customer["first_name"] }}
+            {{ customer["last_name"] }}
+
+        </div>
+
+
+        <div class="info">
+
+            <span class="label">
+                Mobile:
+            </span>
+
+            {{ customer["mobile"] }}
+
+        </div>
+
+
+        <div class="info">
+
+            <span class="label">
+                Email:
+            </span>
+
+            {{ customer["email"] or "Not provided" }}
+
+        </div>
+
+
+        <div class="info">
+
+            <span class="label">
+                Account Created:
+            </span>
+
+            {{ customer["created_at"] }}
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Saved Address</h2>
+
+
+        {% if address %}
+
+            <p>
+                {{ address["address_line"] }}
+            </p>
+
+            <p>
+                {{ address["city"] }},
+                {{ address["state"] }}
+                - {{ address["pincode"] }}
+            </p>
+
+        {% else %}
+
+            <p>
+                No address saved.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="card">
+
+        <a href="/orders">
+            My Orders
+        </a>
+
+        <br><br>
+
+        <a href="/order-tracking">
+            Order Tracking
+        </a>
+
+        <br>
+
+        <a
+            href="/logout"
+            class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

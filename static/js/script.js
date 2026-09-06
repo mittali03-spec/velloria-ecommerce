@@ -1,48 +1,25 @@
-// =====================================================
-// VELLORIA SHOPPING CART
-// =====================================================
+// ========================================
+// VELLORIA CART SYSTEM
+// ========================================
 
+// Keep the existing Velloria cart in localStorage
+let cart = [];
 
-// ================= LOAD CART =================
+try {
+    cart = JSON.parse(localStorage.getItem("velloriaCart")) || [];
 
-let cart = JSON.parse(
-    localStorage.getItem("velloriaCart")
-) || [];
-
-
-// ================= ADD TO CART =================
-
-function addToCart(name, price) {
-
-    // Make sure price is always a number
-    price = Number(price);
-
-    const existingProduct = cart.find(
-        product => product.name === name
-    );
-
-    if (existingProduct) {
-
-        existingProduct.quantity += 1;
-
-    } else {
-
-        cart.push({
-            name: name,
-            price: price,
-            quantity: 1
-        });
-
+    if (!Array.isArray(cart)) {
+        cart = [];
     }
-
-    saveCart();
-    updateCartCount();
-
-    alert(name + " added to cart! 🛍️");
+} catch (error) {
+    console.error("Could not read cart:", error);
+    cart = [];
 }
 
 
-// ================= SAVE CART =================
+// ========================================
+// SAVE CART
+// ========================================
 
 function saveCart() {
 
@@ -51,10 +28,13 @@ function saveCart() {
         JSON.stringify(cart)
     );
 
+    updateCartCount();
 }
 
 
-// ================= CART COUNT =================
+// ========================================
+// UPDATE CART COUNT
+// ========================================
 
 function updateCartCount() {
 
@@ -65,99 +45,199 @@ function updateCartCount() {
         return;
     }
 
-    const totalItems = cart.reduce(
-        (total, product) =>
-            total + Number(product.quantity),
-        0
-    );
+    let totalQuantity = 0;
 
-    cartCount.textContent = totalItems;
+    cart.forEach(function(item) {
 
+        totalQuantity +=
+            Number(item.quantity) || 0;
+
+    });
+
+    cartCount.textContent = totalQuantity;
 }
 
 
-// ================= DISPLAY CART =================
+// ========================================
+// ADD PRODUCT TO CART
+// ========================================
+
+function addToCart(name, price, image) {
+
+    price = Number(price);
+
+    if (!name || isNaN(price)) {
+
+        alert("Unable to add this product to cart.");
+
+        return;
+    }
+
+
+    const existingItem = cart.find(function(item) {
+
+        return item.name === name;
+
+    });
+
+
+    if (existingItem) {
+
+        existingItem.quantity =
+            Number(existingItem.quantity) + 1;
+
+        // If an image was supplied later,
+        // save it to the existing product.
+        if (image && !existingItem.image) {
+            existingItem.image = image;
+        }
+
+    } else {
+
+        cart.push({
+
+            name: name,
+
+            price: price,
+
+            image: image || "",
+
+            quantity: 1
+
+        });
+
+    }
+
+
+    saveCart();
+
+    // Refresh cart if we are currently on cart page
+    displayCart();
+
+    alert(
+    "🛒 Your product has been added to cart!"
+);
+}
+
+
+// ========================================
+// DISPLAY CART
+// ========================================
 
 function displayCart() {
 
-    const cartItems =
+    const cartContainer =
         document.getElementById("cart-items");
+
+    if (!cartContainer) {
+        return;
+    }
+
 
     const emptyCart =
         document.getElementById("empty-cart");
 
-    const cartSummary =
-        document.getElementById("cart-summary");
+    const cartLayout =
+        document.getElementById("cart-layout");
 
 
-    if (!cartItems) {
-        return;
-    }
-
-
-    cartItems.innerHTML = "";
-
-
-    // ================= EMPTY CART =================
+    // ====================================
+    // EMPTY CART
+    // ====================================
 
     if (cart.length === 0) {
 
+        cartContainer.innerHTML = "";
+
         if (emptyCart) {
-            emptyCart.style.display = "block";
+            emptyCart.style.display = "flex";
         }
 
-        if (cartSummary) {
-            cartSummary.style.display = "none";
+        if (cartLayout) {
+            cartLayout.style.display = "none";
         }
 
-        updateTotal();
+        updateCartSummary();
 
         return;
     }
 
 
-    // ================= CART HAS PRODUCTS =================
+    // ====================================
+    // CART HAS PRODUCTS
+    // ====================================
 
     if (emptyCart) {
         emptyCart.style.display = "none";
     }
 
-    if (cartSummary) {
-        cartSummary.style.display = "block";
+    if (cartLayout) {
+        cartLayout.style.display = "grid";
     }
 
 
-    // ================= CREATE CART ITEMS =================
+    cartContainer.innerHTML = "";
 
-    cart.forEach((product, index) => {
 
-        const item =
-            document.createElement("div");
-
-        item.className = "cart-item";
-
+    cart.forEach(function(item, index) {
 
         const price =
-            Number(product.price);
+            Number(item.price) || 0;
 
         const quantity =
-            Number(product.quantity);
+            Number(item.quantity) || 1;
+
+        const itemTotal =
+            price * quantity;
 
 
-        item.innerHTML = `
+        const cartItem =
+            document.createElement("div");
 
-            <div class="cart-item-info">
+        cartItem.className = "cart-item";
 
-                <h3>
-                    ${product.name}
-                </h3>
 
-                <p>
-                    Velloria Collection
-                </p>
+        // Product image
+        let imageHTML = "";
 
-                <div class="cart-item-price">
-                    ₹${price.toLocaleString("en-IN")}
+        if (item.image) {
+
+            imageHTML = `
+                <img
+                    src="${item.image}"
+                    alt="${escapeHTML(item.name)}"
+                    class="cart-product-image"
+                    onerror="this.style.display='none'"
+                >
+            `;
+
+        } else {
+
+            imageHTML = `
+                <div class="cart-product-placeholder">
+                    🛍️
+                </div>
+            `;
+
+        }
+
+
+        cartItem.innerHTML = `
+
+            <div class="cart-product">
+
+                ${imageHTML}
+
+                <div class="cart-product-info">
+
+                    <h3>
+                        ${escapeHTML(item.name)}
+                    </h3>
+
+                    <p>
+                        ₹${price.toFixed(2)}
+                    </p>
+
                 </div>
 
             </div>
@@ -166,9 +246,11 @@ function displayCart() {
             <div class="quantity-controls">
 
                 <button
-                    onclick="changeQuantity(${index}, -1)"
-                >
+                    type="button"
+                    onclick="decreaseQuantity(${index})">
+
                     −
+
                 </button>
 
 
@@ -178,39 +260,69 @@ function displayCart() {
 
 
                 <button
-                    onclick="changeQuantity(${index}, 1)"
-                >
+                    type="button"
+                    onclick="increaseQuantity(${index})">
+
                     +
-                </button>
 
-
-                <button
-                    class="remove-button"
-                    onclick="removeFromCart(${index})"
-                >
-                    Remove
                 </button>
 
             </div>
 
+
+            <div class="item-total">
+
+                ₹${itemTotal.toFixed(2)}
+
+            </div>
+
+
+            <button
+                type="button"
+                class="remove-button"
+                onclick="removeFromCart(${index})">
+
+                Remove
+
+            </button>
+
         `;
 
 
-        cartItems.appendChild(item);
+        cartContainer.appendChild(cartItem);
 
     });
 
 
-    // UPDATE TOTAL
-
-    updateTotal();
-
+    updateCartSummary();
 }
 
 
-// ================= CHANGE QUANTITY =================
+// ========================================
+// ESCAPE HTML
+// ========================================
 
-function changeQuantity(index, change) {
+function escapeHTML(value) {
+
+    return String(value)
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+}
+
+
+// ========================================
+// INCREASE QUANTITY
+// ========================================
+
+function increaseQuantity(index) {
 
     if (!cart[index]) {
         return;
@@ -218,10 +330,36 @@ function changeQuantity(index, change) {
 
 
     cart[index].quantity =
-        Number(cart[index].quantity) + change;
+        Number(cart[index].quantity) + 1;
 
 
-    if (cart[index].quantity <= 0) {
+    saveCart();
+
+    displayCart();
+}
+
+
+// ========================================
+// DECREASE QUANTITY
+// ========================================
+
+function decreaseQuantity(index) {
+
+    if (!cart[index]) {
+        return;
+    }
+
+
+    const quantity =
+        Number(cart[index].quantity);
+
+
+    if (quantity > 1) {
+
+        cart[index].quantity =
+            quantity - 1;
+
+    } else {
 
         cart.splice(index, 1);
 
@@ -230,14 +368,13 @@ function changeQuantity(index, change) {
 
     saveCart();
 
-    updateCartCount();
-
     displayCart();
-
 }
 
 
-// ================= REMOVE PRODUCT =================
+// ========================================
+// REMOVE PRODUCT
+// ========================================
 
 function removeFromCart(index) {
 
@@ -246,99 +383,466 @@ function removeFromCart(index) {
     }
 
 
+    const productName =
+        cart[index].name;
+
+
     cart.splice(index, 1);
+
 
     saveCart();
 
-    updateCartCount();
-
     displayCart();
 
+
+    if (productName) {
+
+        console.log(
+            productName + " removed from cart."
+        );
+
+    }
 }
 
 
-// ================= CALCULATE TOTAL =================
+// ========================================
+// CALCULATE CART TOTAL
+// ========================================
 
-function updateTotal() {
-
-    const totalElement =
-        document.getElementById("cart-total");
-
-    const subtotalElement =
-        document.getElementById("cart-subtotal");
-
-
-    // Calculate total safely
+function calculateCartTotal() {
 
     let total = 0;
 
 
-    cart.forEach(product => {
+    cart.forEach(function(item) {
 
         const price =
-            Number(product.price);
+            Number(item.price) || 0;
 
         const quantity =
-            Number(product.quantity);
+            Number(item.quantity) || 0;
 
 
-        total += price * quantity;
+        total +=
+            price * quantity;
 
     });
 
 
-    const formattedTotal =
-        "₹" + total.toLocaleString("en-IN");
+    return total;
+}
 
 
-    // Update Total Amount
+// ========================================
+// UPDATE CART SUMMARY
+// ========================================
 
-    if (totalElement) {
+function updateCartSummary() {
 
-        totalElement.textContent =
-            formattedTotal;
-
-    }
+    const total =
+        calculateCartTotal();
 
 
-    // Update Price
+    const subtotalElement =
+        document.getElementById(
+            "cart-subtotal"
+        );
+
+
+    const totalElement =
+        document.getElementById(
+            "cart-total"
+        );
+
 
     if (subtotalElement) {
 
         subtotalElement.textContent =
-            formattedTotal;
+            "₹" + total.toFixed(2);
 
     }
+
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            "₹" + total.toFixed(2);
+
+    }
+
+
+    // Update number of products
+    const itemLabel =
+        document.getElementById(
+            "cart-item-label"
+        );
+
+
+    if (itemLabel) {
+
+        let totalQuantity = 0;
+
+
+        cart.forEach(function(item) {
+
+            totalQuantity +=
+                Number(item.quantity) || 0;
+
+        });
+
+
+        if (totalQuantity === 1) {
+
+            itemLabel.textContent =
+                "1 item";
+
+        } else {
+
+            itemLabel.textContent =
+                totalQuantity + " items";
+
+        }
+
+    }
+}
+
+
+// ========================================
+// OLD FUNCTION NAME
+// ========================================
+
+function updateTotal() {
+
+    updateCartSummary();
 
 }
 
 
-// ================= CHECKOUT =================
+// ========================================
+// CHECKOUT BUTTON
+// ========================================
 
-function checkout() {
+async function checkout() {
 
     if (cart.length === 0) {
 
         alert(
-            "Your cart is empty. Add a product first! 🛍️"
+            "Your cart is empty. Please add a product first."
         );
 
         return;
     }
 
 
-    alert(
-        "Proceeding to buy your Velloria items! 💳"
-    );
+    try {
 
+        const response =
+            await fetch("/api/session");
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Could not check login status."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.logged_in) {
+
+            showLoginRequiredPopup();
+
+            return;
+        }
+
+
+        window.location.href =
+            "/checkout";
+
+
+    } catch (error) {
+
+        console.error(
+            "Checkout error:",
+            error
+        );
+
+
+        alert(
+            "Something went wrong. Please try again."
+        );
+
+    }
 }
 
 
-// ================= PAGE LOAD =================
+// ========================================
+// LOGIN REQUIRED POPUP
+// ========================================
+
+function showLoginRequiredPopup() {
+
+    const oldPopup =
+        document.getElementById(
+            "login-required-popup"
+        );
+
+
+    if (oldPopup) {
+
+        oldPopup.remove();
+
+    }
+
+
+    const popup =
+        document.createElement("div");
+
+
+    popup.id =
+        "login-required-popup";
+
+
+    popup.innerHTML = `
+
+        <div class="login-popup-overlay">
+
+            <div class="login-popup">
+
+                <button
+                    type="button"
+                    class="popup-close"
+                    onclick="closeLoginPopup()">
+
+                    ×
+
+                </button>
+
+
+                <div class="popup-icon">
+                    🛒
+                </div>
+
+
+                <h2>
+                    Login Required
+                </h2>
+
+
+                <p>
+                    Please login or sign in
+                    before proceeding to buy.
+                </p>
+
+
+                <div class="popup-buttons">
+
+                    <button
+                        type="button"
+                        class="popup-cancel"
+                        onclick="closeLoginPopup()">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="popup-login"
+                        onclick="goToLogin()">
+
+                        Login / Sign In
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(popup);
+}
+
+
+// ========================================
+// CLOSE LOGIN POPUP
+// ========================================
+
+function closeLoginPopup() {
+
+    const popup =
+        document.getElementById(
+            "login-required-popup"
+        );
+
+
+    if (popup) {
+
+        popup.remove();
+
+    }
+}
+
+
+// ========================================
+// GO TO LOGIN
+// ========================================
+
+function goToLogin() {
+
+    window.location.href =
+        "/login?next=checkout";
+}
+
+
+// ========================================
+// PLACE ORDER
+// ========================================
+
+async function placeOrder() {
+
+    if (cart.length === 0) {
+
+        alert(
+            "Your cart is empty."
+        );
+
+        return;
+    }
+
+
+    const button =
+        document.getElementById(
+            "place-order-button"
+        );
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Placing Order...";
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/create-order",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        items: cart
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        // Login required
+        if (response.status === 401) {
+
+            window.location.href =
+                "/login?next=checkout";
+
+            return;
+        }
+
+
+        if (!data.ok) {
+
+            alert(
+                data.message ||
+                "Could not place order."
+            );
+
+            return;
+        }
+
+
+        // =================================
+        // ORDER SUCCESS
+        // =================================
+
+        cart = [];
+
+        saveCart();
+
+
+        alert(
+            "Order placed successfully! 🎉\n\n" +
+            "Order #" +
+            data.order_id
+        );
+
+
+        window.location.href =
+            "/orders";
+
+
+    } catch (error) {
+
+        console.error(
+            "Order error:",
+            error
+        );
+
+
+        alert(
+            "Something went wrong while placing the order."
+        );
+
+
+    } finally {
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.textContent =
+                "Place Order";
+
+        }
+
+    }
+}
+
+
+// ========================================
+// PAGE LOAD
+// ========================================
 
 document.addEventListener(
     "DOMContentLoaded",
-    function () {
+    function() {
 
         updateCartCount();
 

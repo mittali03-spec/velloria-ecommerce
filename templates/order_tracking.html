@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Velloria - Order Tracking</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4efe4;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .status {
+            font-size: 20px;
+            font-weight: bold;
+            color: #687044;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding: 12px 0;
+        }
+
+        .back {
+            color: #687044;
+            text-decoration: none;
+        }
+
+        .not-found {
+            text-align: center;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <a
+        href="/orders"
+        class="back">
+        ← Back to My Orders
+    </a>
+
+
+    {% if order %}
+
+        <div class="card">
+
+            <h1>
+                Order #{{ order["id"] }}
+            </h1>
+
+            <p>
+                Placed on:
+                {{ order["created_at"] }}
+            </p>
+
+            <p>
+                Current Status:
+                <span class="status">
+                    {{ order["status"] }}
+                </span>
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Order Items</h2>
+
+
+            {% for item in items %}
+
+            <div class="item">
+
+                <span>
+                    {{ item["product_name"] }}
+                    × {{ item["quantity"] }}
+                </span>
+
+                <strong>
+                    ₹{{ "%.2f"|format(
+                        item["price"] * item["quantity"]
+                    ) }}
+                </strong>
+
+            </div>
+
+            {% endfor %}
+
+
+            <h2 style="text-align:right;">
+
+                Total:
+                ₹{{ "%.2f"|format(
+                    order["total_amount"]
+                ) }}
+
+            </h2>
+
+        </div>
+
+    {% else %}
+
+        <div class="card not-found">
+
+            <h1>Order Not Found</h1>
+
+            <p>
+                We could not find this order.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>
