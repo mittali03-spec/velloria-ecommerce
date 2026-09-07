@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -15,6 +14,247 @@
     <link
         rel="stylesheet"
         href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        /* =========================================================
+           VELLORIA EMPTY CART
+           ========================================================= */
+
+        .empty-cart {
+            display: none;
+            min-height: 500px;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 60px 20px 80px;
+        }
+
+
+        /* Illustration */
+
+        .empty-cart-illustration {
+            position: relative;
+            width: 150px;
+            height: 145px;
+            margin-bottom: 25px;
+        }
+
+
+        .empty-bag {
+            position: absolute;
+            width: 82px;
+            height: 88px;
+            left: 34px;
+            top: 35px;
+
+            background: linear-gradient(
+                145deg,
+                #ff6f91,
+                #ff3f70
+            );
+
+            border-radius: 8px 8px 13px 13px;
+
+            transform: rotate(-5deg);
+
+            box-shadow:
+                0 15px 25px rgba(255, 63, 112, 0.18);
+        }
+
+
+        .empty-bag::before {
+            content: "";
+            position: absolute;
+
+            width: 42px;
+            height: 34px;
+
+            left: 19px;
+            top: -27px;
+
+            border: 4px solid #555;
+            border-bottom: 0;
+
+            border-radius: 25px 25px 0 0;
+
+            transform: rotate(5deg);
+        }
+
+
+        .empty-bag::after {
+            content: "V";
+
+            position: absolute;
+
+            left: 26px;
+            top: 27px;
+
+            color: white;
+
+            font-family: Georgia, serif;
+            font-size: 38px;
+            font-weight: bold;
+
+            transform: rotate(5deg);
+        }
+
+
+        /* Little motion lines */
+
+        .empty-motion {
+            position: absolute;
+            left: 2px;
+            top: 57px;
+
+            width: 27px;
+            height: 4px;
+
+            background: #777;
+            border-radius: 10px;
+
+            transform: rotate(-3deg);
+        }
+
+
+        .empty-motion::after {
+            content: "";
+
+            position: absolute;
+
+            width: 13px;
+            height: 4px;
+
+            left: 8px;
+            top: -10px;
+
+            background: #777;
+            border-radius: 10px;
+        }
+
+
+        /* Ground shadow */
+
+        .empty-shadow {
+            position: absolute;
+
+            width: 75px;
+            height: 9px;
+
+            left: 39px;
+            bottom: 4px;
+
+            background: rgba(0, 0, 0, 0.06);
+
+            border-radius: 50%;
+
+            filter: blur(3px);
+        }
+
+
+        /* Heading */
+
+        .empty-cart h2 {
+            margin: 0 0 8px;
+
+            font-size: 24px;
+            font-weight: 700;
+
+            color: #252525;
+
+            letter-spacing: -0.3px;
+        }
+
+
+        /* Description */
+
+        .empty-cart p {
+            margin: 0;
+
+            max-width: 430px;
+
+            color: #888;
+
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+
+        /* Button */
+
+        .empty-cart button {
+            margin-top: 26px;
+
+            padding: 13px 27px;
+
+            background: white;
+
+            color: #ff3f70;
+
+            border: 1.5px solid #ff3f70;
+
+            border-radius: 3px;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            letter-spacing: 0.6px;
+
+            cursor: pointer;
+
+            transition:
+                background 0.25s ease,
+                color 0.25s ease,
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+
+        .empty-cart button:hover {
+            background: #ff3f70;
+            color: white;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px rgba(255, 63, 112, 0.18);
+        }
+
+
+        /* =========================================================
+           MOBILE
+           ========================================================= */
+
+        @media (max-width: 600px) {
+
+            .empty-cart {
+                min-height: 430px;
+                padding: 45px 18px 60px;
+            }
+
+            .empty-cart-illustration {
+                transform: scale(0.9);
+                margin-bottom: 18px;
+            }
+
+            .empty-cart h2 {
+                font-size: 21px;
+            }
+
+            .empty-cart p {
+                font-size: 14px;
+                max-width: 310px;
+            }
+
+            .empty-cart button {
+                width: auto;
+                padding: 12px 22px;
+            }
+        }
+
+    </style>
 
 </head>
 
@@ -54,30 +294,53 @@
 
 
 
-        <!-- ================= EMPTY CART ================= -->
+        <!-- =====================================================
+             EMPTY CART
+             ===================================================== -->
 
         <div
             id="empty-cart"
             class="empty-cart">
 
-            <div class="empty-cart-icon">
-                🛍️
+
+            <!-- ================= ILLUSTRATION ================= -->
+
+            <div class="empty-cart-illustration">
+
+                <div class="empty-motion"></div>
+
+                <div class="empty-bag"></div>
+
+                <div class="empty-shadow"></div>
+
             </div>
 
 
+
+            <!-- ================= MESSAGE ================= -->
+
             <h2>
-                Your cart is empty
+                Hey, it feels so light! ✨
             </h2>
 
 
+            <p>
+                There is nothing in your bag yet.
+                Let's add some beautiful pieces.
+            </p>
+
+
+
+            <!-- ================= BUTTON ================= -->
 
             <button
                 type="button"
                 onclick="window.location.href='/'">
 
-                Start Shopping →
+                ADD ITEMS FROM VELLORIA
 
             </button>
+
 
         </div>
 
