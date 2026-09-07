@@ -795,11 +795,16 @@ async function placeOrder() {
 
        console.log("ORDER RESPONSE:", data);
 
-        alert(
-          "Order placed successfully! 🎉\n\n" +
-          "Order #" +
-          data.customer_order_no
-       );
+      const orderNumber = data.customer_order_no;
+
+console.log("FULL ORDER RESPONSE:", data);
+console.log("CUSTOMER ORDER NUMBER:", orderNumber);
+
+alert(
+    "Order placed successfully! 🎉\n\n" +
+    "Order #" +
+    orderNumber
+);
 
 
         window.location.href =

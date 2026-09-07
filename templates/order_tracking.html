@@ -66,20 +66,14 @@
 
 <div class="container">
 
-<a
-    href="/orders"
-    class="back">
-    ← Back to My Orders
-</a>
+<a href="/order-tracking?order_id={{ order['id'] }}">
 
 
 {% if order %}
 
     <div class="card">
 
-        <h1>
-            Order #{{ order["customer_order_no"] }}
-        </h1>
+        <h1>Order #{{ order["customer_order_no"] }}</h1>
 
         <p>
             Placed on:

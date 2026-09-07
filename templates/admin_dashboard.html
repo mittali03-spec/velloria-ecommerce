@@ -337,86 +337,116 @@
 
     </div>
 
+<!-- ORDERS -->
 
-    <!-- ORDERS -->
+<div class="section">
 
-    <div class="section">
+    <h2>🛒 All Orders</h2>
 
-        <h2>🛒 All Orders</h2>
+    <table>
 
-        <table>
+        <thead>
 
-            <thead>
+            <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>Delivery Address</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
 
-                <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Mobile</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Action</th>
-                </tr>
+        </thead>
 
-            </thead>
+        <tbody>
 
-            <tbody>
+        {% for order in orders %}
 
-            {% for order in orders %}
+            <tr>
 
-                <tr>
+                <td>
+                    <strong>
+                        #{{ order["customer_order_no"] }}
+                    </strong>
+                </td>
 
-                    <td>
-                        #{{ order["id"] }}
-                    </td>
+                <td>
+                    {{ order["first_name"] }}
+                    {{ order["last_name"] }}
+                </td>
 
-                    <td>
-                        {{ order["first_name"] }}
-                        {{ order["last_name"] }}
-                    </td>
+                <td>
+                    {{ order["mobile"] }}
+                </td>
 
-                    <td>
-                        {{ order["mobile"] }}
-                    </td>
+                <td>
+                    {{ order["email"] or "Not provided" }}
+                </td>
 
-                    <td>
-                        ₹{{ "%.2f"|format(order["total_amount"]) }}
-                    </td>
+                <td>
+                    {{ order["address_line"] or "" }}
 
-                    <td>
+                    {% if order["city"] %}
+                        , {{ order["city"] }}
+                    {% endif %}
 
-                        <span class="status">
-                            {{ order["status"] }}
-                        </span>
+                    {% if order["state"] %}
+                        , {{ order["state"] }}
+                    {% endif %}
 
-                    </td>
+                    {% if order["pincode"] %}
+                        - {{ order["pincode"] }}
+                    {% endif %}
+                </td>
 
-                    <td>
-                        {{ order["created_at"] }}
-                    </td>
+                <td>
+                    ₹{{ "%.2f"|format(order["total_amount"]) }}
+                </td>
 
-                    <td>
+                <td>
 
-                        <a
-                            class="view-button"
-                            href="/admin/order/{{ order['id'] }}">
-                            View
-                        </a>
+                    <span class="status">
+                        {{ order["status"] }}
+                    </span>
 
-                    </td>
+                </td>
 
-                </tr>
+                <td>
+                    {{ order["created_at"] }}
+                </td>
 
-            {% else %}
+                <td>
 
-                <tr>
+                    <a
+                        class="view-button"
+                        href="/admin/order/{{ order['id'] }}">
+                        View
+                    </a>
 
-                    <td colspan="7">
-                        No orders yet.
-                    </td>
+                </td>
 
-                </tr>
+            </tr>
 
+        {% else %}
+
+            <tr>
+
+                <td colspan="9">
+                    No orders yet.
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
             {% endfor %}
 
             </tbody>
